@@ -1,11 +1,21 @@
 from fastapi import FastAPI, Query
-import os, time, socket
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+import time, socket, os
 
 app = FastAPI()
 HOST = socket.gethostname()
 
+# Serve folder static/
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 @app.get("/")
 def root():
+    # Kirim UI
+    return FileResponse("static/index.html")
+
+@app.get("/api/info")
+def info():
     return {
         "ok": True,
         "hostname": HOST,
